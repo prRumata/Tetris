@@ -1,15 +1,21 @@
 # Зависимости:
+
 sfml
 
 # Сборка под Linux:
-'''sh
+
+```sh
   mkdir bin
   make
-'''
+```
 
 # Запуск:
-'''sh
+
+```sh
   bin/Tetris
-'''
+```
 # Управление:
-W/Right, D/Left, W/Up
+
+W/Right
+D/Left
+W/Up

@@ -2,8 +2,14 @@
 sfml
 
 # Сборка под Linux:
-mkdir bin
-make
+'''sh
+  mkdir bin
+  make
+'''
 
 # Запуск:
-bin/Tetris
+'''sh
+  bin/Tetris
+'''
+# Управление:
+W/Right, D/Left, W/Up

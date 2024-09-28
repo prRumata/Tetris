@@ -17,5 +17,5 @@ sfml
 # Управление:
 
 D/Right
-D/Left
+A/Left
 W/Up

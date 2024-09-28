@@ -16,6 +16,10 @@ sfml
 ```
 # Управление:
 
+```
 D/Right
 A/Left
 W/Up
+S/Down
+Space
+```

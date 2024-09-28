@@ -16,6 +16,6 @@ sfml
 ```
 # Управление:
 
-W/Right
+D/Right
 D/Left
 W/Up

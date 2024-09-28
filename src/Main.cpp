@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <vector>
 #include <ctime>
 
@@ -30,6 +31,8 @@ int main()
     sf::Clock move_clock;
 
     bool rotate_check = true;
+    bool move_faster_check = true;
+    bool fall_check = true;
 
     while (window.isOpen())
     {
@@ -39,25 +42,7 @@ int main()
             fps_count = 0;
             fps_clock.restart();
         }
-        if (fall_clock.getElapsedTime().asMilliseconds() > FALL_SPEED)
-        {
-            if (tetromino.move_down(matrix))
-            {
-                tetromino.update_matrix(matrix);
-                if (!tetromino.reset(0, matrix))
-                {
-                    for (int i = 0; i < COLUMNS; ++i)
-                    {
-                        for (int j = 0; j < ROWS; ++j)
-                        {
-                            matrix[i][j] = CC_GREY;
-                        }
-                    }
-                }
-            }
 
-            fall_clock.restart();
-        }
 
         while (window.pollEvent(event))
         {
@@ -85,6 +70,16 @@ int main()
                         {
                             rotate_check = true;
                             break;
+                        }
+                        case sf::Keyboard::S:
+                        case sf::Keyboard::Down:
+                        {
+                            move_faster_check = true;
+                            break;
+                        }
+                        case sf::Keyboard::Space:
+                        {
+                            fall_check = true;
                         }
                         default:
                         {
@@ -136,6 +131,56 @@ int main()
                 tetromino.rotate(matrix);
                 rotate_check = false;
             }
+        }
+
+        if (move_faster_check)
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+                sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            {
+                move_faster_check = false;
+            }
+        }
+
+        if (fall_check)
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            {
+                fall_check = false;
+                while(!tetromino.move_down(matrix));
+                tetromino.update_matrix(matrix);
+                if (!tetromino.reset(0, matrix))
+                {
+                    for (int i = 0; i < COLUMNS; ++i)
+                    {
+                        for (int j = 0; j < ROWS; ++j)
+                        {
+                            matrix[i][j] = CC_GREY;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (fall_clock.getElapsedTime().asMilliseconds() >
+            (move_faster_check ? FALL_SPEED : FALL_FASTER_SPEED))
+        {
+            if (tetromino.move_down(matrix))
+            {
+                tetromino.update_matrix(matrix);
+                if (!tetromino.reset(0, matrix))
+                {
+                    for (int i = 0; i < COLUMNS; ++i)
+                    {
+                        for (int j = 0; j < ROWS; ++j)
+                        {
+                            matrix[i][j] = CC_GREY;
+                        }
+                    }
+                }
+            }
+
+            fall_clock.restart();
         }
 
         sf::RectangleShape cell(sf::Vector2f(CELL_SIZE - 1, CELL_SIZE - 1));

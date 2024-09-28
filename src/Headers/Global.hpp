@@ -17,5 +17,6 @@ enum CELL_COLORS
     CC_CYAN        = 6
 };
 
-constexpr unsigned int FALL_SPEED = 200;
-constexpr unsigned int MOVE_SPEED = 125;
+constexpr unsigned int FALL_SPEED = 300;
+constexpr unsigned int FALL_FASTER_SPEED = 50;
+constexpr unsigned int MOVE_SPEED = 75;

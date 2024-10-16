@@ -1,9 +1,10 @@
 #include "Headers/Clear.hpp"
 #include "Headers/Global.hpp"
 
-void Clear(std::vector<std::vector<unsigned char>>& matrix)
+int Clear(std::vector<std::vector<unsigned char>>& matrix)
 {
     bool flag;
+    unsigned char count = 0;
     for (int y = 0; y < ROWS; ++y)
     {
         flag = true;
@@ -17,6 +18,7 @@ void Clear(std::vector<std::vector<unsigned char>>& matrix)
         }
         if (flag)
         {
+            ++count;
             for (int i = y; i > 0; --i)
             {
                 for (int j = 0; j < COLUMNS; ++j)
@@ -26,4 +28,24 @@ void Clear(std::vector<std::vector<unsigned char>>& matrix)
             }
         }
     }
+
+    switch (count)
+    {
+        case 0:
+            return 0;
+            break;
+        case 1:
+            return 100;
+            break;
+        case 2:
+            return 300;
+            break;
+        case 3:
+            return 700;
+            break;
+        case 4:
+            return 1500;
+            break;
+    }
+    return 0;
 }

@@ -2,4 +2,4 @@
 
 #include <vector>
 
-void Clear(std::vector<std::vector<unsigned char>>& matrix);
+int Clear(std::vector<std::vector<unsigned char>>& matrix);

@@ -19,4 +19,7 @@ enum CELL_COLORS
 
 constexpr unsigned int FALL_SPEED = 300;
 constexpr unsigned int FALL_FASTER_SPEED = 50;
-constexpr unsigned int MOVE_SPEED = 75;
+constexpr unsigned int MOVE_SPEED = 100;
+
+constexpr unsigned int NEXT_X = 64;
+constexpr unsigned int NEXT_Y = 16;

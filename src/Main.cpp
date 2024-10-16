@@ -1,17 +1,27 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include <SFML/Window/Keyboard.hpp>
+#include <string>
 #include <vector>
 #include <ctime>
 
 #include "Headers/Global.hpp"
 #include "Headers/GetColor.hpp"
 #include "Headers/Tetromino.hpp"
+#include "Headers/Clear.hpp"
 
 int main()
 {
     std::srand(std::time(nullptr));
+
+    sf::Font font;
+    font.setSmooth(false);
+    font.loadFromFile("font.otf");
+
+    unsigned int score = 0;
+    sf::Text score_text(std::to_string(score), font, 9);
+    score_text.setPosition(84, 147);
 
     sf::Event event;
 
@@ -20,11 +30,13 @@ int main()
 
     std::vector<std::vector<unsigned char>> matrix(COLUMNS, std::vector<unsigned char>(ROWS, CC_GREY));
 
-    sf::RenderWindow window(sf::VideoMode(CELL_SIZE * COLUMNS * SCREEN_RESIZE, CELL_SIZE * ROWS * SCREEN_RESIZE), sf::String("FPS: 0"));
-    window.setVerticalSyncEnabled(true);
-    window.setView(sf::View(sf::FloatRect(0, 0, CELL_SIZE * COLUMNS, CELL_SIZE * ROWS)));
+    sf::RenderWindow window(sf::VideoMode(CELL_SIZE * COLUMNS * SCREEN_RESIZE + 48 * SCREEN_RESIZE,
+                                          CELL_SIZE * ROWS * SCREEN_RESIZE), sf::String("FPS: 0"));
+    window.setFramerateLimit(60);
+    window.setView(sf::View(sf::FloatRect(0, 0, CELL_SIZE * COLUMNS + 48, CELL_SIZE * ROWS)));
 
     Tetromino tetromino(0);
+    tetromino.update_shadow(matrix);
     sf::Clock fall_clock;
 
     bool move_check = true;
@@ -151,6 +163,7 @@ int main()
                 tetromino.update_matrix(matrix);
                 if (!tetromino.reset(0, matrix))
                 {
+                    score = 0;
                     for (int i = 0; i < COLUMNS; ++i)
                     {
                         for (int j = 0; j < ROWS; ++j)
@@ -158,6 +171,10 @@ int main()
                             matrix[i][j] = CC_GREY;
                         }
                     }
+                }
+                else {
+                    score += Clear(matrix);
+                    score_text.setString(std::to_string(score));
                 }
             }
         }
@@ -170,6 +187,7 @@ int main()
                 tetromino.update_matrix(matrix);
                 if (!tetromino.reset(0, matrix))
                 {
+                    score = 0;
                     for (int i = 0; i < COLUMNS; ++i)
                     {
                         for (int j = 0; j < ROWS; ++j)
@@ -177,6 +195,9 @@ int main()
                             matrix[i][j] = CC_GREY;
                         }
                     }
+                }
+                else {
+                    score += Clear(matrix);
                 }
             }
 
@@ -198,14 +219,51 @@ int main()
             }
         }
 
+        cell.setFillColor(GetColor(CC_GREY));
+
+        for (int i = 0; i < 4; ++i)
+        {
+            for (int j = 0; j < 4; ++j)
+            {
+                cell.setPosition((COLUMNS + 1 + i) * CELL_SIZE + 0.5f,
+                                 (1 + j) * CELL_SIZE + 0.5f);
+                window.draw(cell);
+            }
+        }
+
+
+
+        cell.setFillColor(sf::Color(100, 100, 100));
+
+        for (const sf::Vector2<char>& mino : tetromino.get_shadow())
+		{
+			cell.setPosition(static_cast<float>(CELL_SIZE * mino.x + 0.5f),
+			                 static_cast<float>(CELL_SIZE * mino.y + 0.5f));
+
+			window.draw(cell);
+		}
+
         cell.setFillColor(GetColor(tetromino.get_color()));
 
         for (const sf::Vector2<char>& mino : tetromino.get_minos())
 		{
-			cell.setPosition(static_cast<float>(CELL_SIZE * mino.x + 0.5f), static_cast<float>(CELL_SIZE * mino.y + 0.5f));
+			cell.setPosition(static_cast<float>(CELL_SIZE * mino.x + 0.5f),
+			                 static_cast<float>(CELL_SIZE * mino.y + 0.5f));
 
 			window.draw(cell);
 		}
+
+		cell.setFillColor(GetColor(tetromino.get_next_color()));
+
+        for (const sf::Vector2<char>& mino : tetromino.get_next_minos())
+        {
+            cell.setPosition(static_cast<float>(CELL_SIZE * mino.x + NEXT_X + 0.5f),
+                             static_cast<float>(CELL_SIZE * mino.y + NEXT_Y + 0.5f));
+
+            window.draw(cell);
+        }
+
+        window.draw(score_text);
 
         window.display();
         ++fps_count;

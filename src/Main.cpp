@@ -1,5 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Text.hpp>
+ #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <string>
@@ -174,7 +173,6 @@ int main()
                 }
                 else {
                     score += Clear(matrix);
-                    score_text.setString(std::to_string(score));
                 }
             }
         }
@@ -263,6 +261,7 @@ int main()
             window.draw(cell);
         }
 
+        score_text.setString(std::to_string(score));
         window.draw(score_text);
 
         window.display();

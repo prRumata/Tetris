@@ -1,5 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics.hpp>
 
 sf::Color GetColor(unsigned char color_i);

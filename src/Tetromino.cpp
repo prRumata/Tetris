@@ -2,7 +2,7 @@
 #include "Headers/SetShape.hpp"
 #include "Headers/Tetromino.hpp"
 #include "Headers/RotateShape.hpp"
-#include <SFML/System/Vector2.hpp>
+#include <SFML/System.hpp>
 
 
 Tetromino::Tetromino(unsigned char shape)
